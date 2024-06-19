@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "588928067577",
+    "project_id": "life-skills-egy",
+    "storage_bucket": "life-skills-egy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588928067577:android:885a4eba926ab7a299ff28",
+        "android_client_info": {
+          "package_name": "com.lifeskills.lifeskillsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIKONBF1eIAmnp7iBWLQUwF_jzkw4197I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
