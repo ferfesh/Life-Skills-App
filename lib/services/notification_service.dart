@@ -6,7 +6,7 @@ import '../screens/DetailsScreen.dart';
 import '../screens/CustomScreen.dart';
 
 class NotificationService {
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -15,7 +15,7 @@ class NotificationService {
 
   Future<void> initialize() async {
     // Request permissions for iOS
-    NotificationSettings settings = await _firebaseMessaging.requestPermission(
+    NotificationSettings settings = await firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
       sound: true,
@@ -28,32 +28,47 @@ class NotificationService {
     }
 
     // Initialize local notifications
-    const AndroidInitializationSettings initializationSettingsAndroid =
+    final AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
     // تم تحديث هذا الجزء ليتوافق مع الإصدار الأحدث من حزمة flutter_local_notifications
-    IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+    DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
       requestAlertPermission: true,
       requestBadgePermission: true,
       requestSoundPermission: true,
       onDidReceiveLocalNotification: onDidReceiveLocalNotification,
     );
+    // تعريف معالج الرسائل في الخلفية
+    FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
 
-    final InitializationSettings initializationSettings =
+    /* final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS, // تم تغيير الاسم هنا
-    );
-
-    // تعريف معالج الرسائل في الخلفية
-    FirebaseMessaging.onBackgroundMessage(_backgroundMessageHandler);
+    );  
 
     // تهيئة الإشعارات المحلية
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification:
-          onSelectNotification(payload), // تأكد من تعريف هذه الدالة في فئتك
+      // استخدام onDidReceiveNotificationResponse بدلاً من onSelectNotification
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // قم بكتابة منطق الإشعار هنا
+      }, // تأكد من تعريف هذه الدالة في فئتك
+    );*/
+  }
+
+  Future<void> init() async {
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(),
+    );
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) async {
+        // اكتب منطق الإشعار هنا
+      },
     );
   }
 
@@ -88,7 +103,7 @@ class NotificationService {
             )));
   }
 
-  Future<void> onSelectNotification(String? payload) async {
+  Future<void> onSelectNotification(payload) async {
     // استخدام المفتاح العالمي للوصول إلى context
     final context = navigatorKey.currentState?.context;
 

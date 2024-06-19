@@ -52,14 +52,22 @@ class MyApp extends StatelessWidget {
           Locale('en', ''),
           Locale('ar', ''),
         ],
-        home: Consumer<AuthService>(
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('Life Skills App'),
+          ),
+          body: const Center(
+            child: Text('Welcome to Life Skills App!'),
+          ),
+        ),
+        /* home: Consumer<AuthService>(
           builder: (context, authService, _) {
             if (authService.user != null) {
               return HomeScreen();
             }
             return LoginScreen();
           },
-        ),
+        ), */
       ),
     );
   }
